@@ -1,18 +1,13 @@
 # A LESS compiler for ASP.NET Core using dotless
 
-[![NuGet](https://img.shields.io/nuget/v/codeessentials.WebOptimizer.Dotless.svg)](https://nuget.org/packages/codeessentials.WebOptimizer.Dotless/)
+[![NuGet](https://img.shields.io/nuget/v/snipervld.WebOptimizer.Dotless.svg)](https://nuget.org/packages/snipervld.WebOptimizer.Dotless/)
 
 This package compiles LESS files into CSS by hooking into the [LigerShark.WebOptimizer](https://github.com/ligershark/WebOptimizer) pipeline.
 
-## Versions
-Master (Version >= 3.0) is being updated for ```ASP.NET Core 3.x```.
-
-For ```ASP.NET Core 2.x```, use the latest 1.0.10 [Tag](https://github.com/twenzel/WebOptimizer.Dotless/tree/v1.0.10) or [NuGet Package](https://www.nuget.org/packages/codeessentials.WebOptimizer.Dotless/1.0.10).
-
 ## Install
-Add the NuGet package [codeessentials.WebOptimizer.Dotless](https://nuget.org/packages/codeessentials.WebOptimizer.Dotless/) to any ASP.NET Core project supporting .NET Standard 2.0 or higher.
+Add the NuGet package [snipervld.WebOptimizer.Dotless](https://nuget.org/packages/snipervld.WebOptimizer.Dotless/) to any ASP.NET Core project supporting .NET Core 3.1 or higher.
 
-> &gt; dotnet add package codeessentials.WebOptimizer.Dotless
+> &gt; dotnet add package snipervld.WebOptimizer.Dotless
 
 ### Versions
 Version|Support
