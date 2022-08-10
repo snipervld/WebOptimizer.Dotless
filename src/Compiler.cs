@@ -37,6 +37,7 @@ namespace WebOptimizer.Dotless
                 IFileInfo file = fileProvider.GetFileInfo(route);
 
                 engine.CurrentDirectory = Path.GetDirectoryName(file.PhysicalPath);
+                engine.ResetImports();
                 var css = engine.TransformToCss(context.Content[route].AsString(), null);
 
                 content[route] = System.Text.Encoding.UTF8.GetBytes(css);
