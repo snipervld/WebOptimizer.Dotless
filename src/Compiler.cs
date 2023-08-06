@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace WebOptimizer.Dotless
 {
     /// <summary>
-    /// Compiles Sass files
+    /// Compiles Less files
     /// </summary>
     /// <seealso cref="WebOptimizer.IProcessor" />
     public class Compiler : IProcessor
@@ -30,15 +30,15 @@ namespace WebOptimizer.Dotless
             var env = context.HttpContext.RequestServices.GetRequiredService<IWebHostEnvironment>();
             IFileProvider fileProvider = context.Asset.GetFileProvider(env);
 
-            var engine = new EngineFactory().GetEngine();
+            var engine = new EngineFactory().GetEngine(new CustomContainerFactory(fileProvider));
 
             foreach (string route in context.Content.Keys)
             {
                 IFileInfo file = fileProvider.GetFileInfo(route);
 
-                engine.CurrentDirectory = Path.GetDirectoryName(file.PhysicalPath);
+                engine.CurrentDirectory = Path.GetDirectoryName(route);
                 engine.ResetImports();
-                var css = engine.TransformToCss(context.Content[route].AsString(), null);
+                var css = engine.TransformToCss(context.Content[route].AsString(), Path.GetFileName(route));
 
                 content[route] = System.Text.Encoding.UTF8.GetBytes(css);
             }
