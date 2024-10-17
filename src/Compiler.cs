@@ -34,13 +34,21 @@ namespace WebOptimizer.Dotless
 
             foreach (string route in context.Content.Keys)
             {
-                IFileInfo file = fileProvider.GetFileInfo(route);
+                var fileName = Path.GetFileName(route);
 
-                engine.CurrentDirectory = Path.GetDirectoryName(route);
-                engine.ResetImports();
-                var css = engine.TransformToCss(context.Content[route].AsString(), Path.GetFileName(route));
+                // Do not do transformations for .css files
+                if (fileName?.EndsWith(".css", StringComparison.InvariantCultureIgnoreCase) ?? false)
+                {
+                    content[route] = context.Content[route];
+                }
+                else
+                {
+                    engine.CurrentDirectory = Path.GetDirectoryName(route);
+                    engine.ResetImports();
+                    var css = engine.TransformToCss(context.Content[route].AsString(), fileName);
 
-                content[route] = System.Text.Encoding.UTF8.GetBytes(css);
+                    content[route] = System.Text.Encoding.UTF8.GetBytes(css);
+                }
             }
 
             context.Content = content;

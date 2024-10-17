@@ -83,7 +83,7 @@ In `_ViewImports.cshtml` register the TagHelpers by adding `@addTagHelper *, Web
 
 ## Differences From [twenzel's WebOptimizer.Dotless](https://github.com/twenzel/WebOptimizer.Dotless)
 - Added an ability to pass css settings to minificator.
-- It's now possible to include regular `.css` files into `.less` bundles.
+- It's now possible to include regular `.css` files into `.less` bundles. `.css` files are not processed by `LessEngine`.
 - `LessEngine`s imports are reset between each `.less` file compilation, when there are multiple `.less` files per bundle. It fixes an issue, when multiple files with import statements are located in different directories, but due to `LessEngine`'s imports caching mechanism, `LessEngine` handles them incorrectly, e.g. if two `.less` files `dir/a.less` and `b.less` imports the same `root.less`, `LessEngine` tries to get content of `root.less` from incorrect location, when transforning `b.less`.
 - Added a support for abstract `IFileProvider`s, e.g. `ManifestEmbeddedFileProvider`.
 - Use custom `dotless.Core` compiler, which fixes bug in `ResetImports` method, whech prevents the user to compile multiple `.less` files in the same directory, which reference imports the same file.

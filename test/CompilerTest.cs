@@ -131,6 +131,45 @@ namespace WebOptimizer.Dotless.Test
             Assert.Equal(".test .active {\n  color: red;\n}\n* {\n  margin: 1px;\n}", result.AsString().Trim());
         }
 
+        [Fact]
+        public async Task Compile_Do_Not_Compile_Plain_Css_Success()
+        {
+            var processor = new Compiler();
+            var context = new Mock<IAssetContext>().SetupAllProperties();
+            var asset = new Mock<IAsset>().SetupAllProperties();
+            var env = new Mock<IWebHostEnvironment>();
+            var fileProvider = new Mock<IFileProvider>();
+
+            var inputLessFile = new PhysicalFileInfo(new FileInfo("foo.less"));
+            var inputCssFile = new PhysicalFileInfo(new FileInfo("foo.css"));
+
+            context.Object.Content = new Dictionary<string, byte[]> {
+                { "/foo.less", "@foo: 1px; * {margin: @foo}".AsByteArray() },
+                { "/foo.css", "@foo: 1px; * {margin: @foo}".AsByteArray() },
+            };
+
+            context.Setup(s => s.HttpContext.RequestServices.GetService(typeof(IWebHostEnvironment)))
+                .Returns(env.Object);
+
+            context.SetupGet(s => s.Asset)
+                .Returns(asset.Object);
+
+            env.SetupGet(e => e.WebRootFileProvider)
+                .Returns(fileProvider.Object);
+
+            fileProvider.Setup(f => f.GetFileInfo(inputLessFile.Name))
+                .Returns(inputLessFile);
+            fileProvider.Setup(f => f.GetFileInfo(inputCssFile.Name))
+                .Returns(inputCssFile);
+
+            await processor.ExecuteAsync(context.Object);
+            var resultLess = context.Object.Content["/foo.less"].AsString().Trim();
+            var resultCss = context.Object.Content["/foo.css"].AsString().Trim();
+
+            Assert.Equal("* {\n  margin: 1px;\n}", resultLess);
+            Assert.Equal("@foo: 1px; * {margin: @foo}", resultCss);
+        }
+
         private static Stream GenerateStreamFromString(string s)
         {
             var stream = new MemoryStream();
